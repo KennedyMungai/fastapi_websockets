@@ -38,6 +38,18 @@ async def receive_message(websocket: WebSocket, username: str):
                 await websocket.send_json(message_event.dict())
 
 
+async def send_message(websocket: WebSocket, username: str):
+    """Defined the send message asynchronous function
+
+    Args:
+        websocket (WebSocket): The websocket object
+        username (str): The username of the sender
+    """
+    data = await websocket.receive_text()
+    event = MessageEvent(username=username, message=data)
+    await broadcast.publish(channel=CHANNEL, message=event.json())
+
+
 @app.get(
     "/",
     name="home",
