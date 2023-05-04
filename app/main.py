@@ -41,16 +41,23 @@ async def send_time(websocket: WebSocket):
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket) -> None:
-    """A simple websocket endpoint
+    """The websocket endpoint
 
     Args:
-        websocket (WebSocket): The websocket object
+        websocket (WebSocket): A websocket object
     """
     await websocket.accept()
 
     try:
         while True:
-            data = await websocket.receive_text()
-            await websocket.send_text(f"Message received: {data}")
-    except WebSocketDisconnect:
+            echo_message_task = asyncio.create_task(echo_message(websocket))
+            send_time_task = asyncio.create_task(send_time(websocket))
+
+            done, pending = await asyncio.wait({echo_message_task, send_time_task}, return_when=asyncio.FIRST_COMPLETED)
+
+            for task in pending:
+                task.cancel()
+            for task in done():
+                task.result()
+    except WebSocketDisconnect():
         await websocket.close()
