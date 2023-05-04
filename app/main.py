@@ -114,3 +114,17 @@ async def websocket_endpoint(
                 task.result()
     except WebSocketDisconnect():
         await websocket.close()
+
+
+@app.on_event("startup")
+async def startup():
+    """Runs on startup
+    """
+    await broadcast.connect()
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    """Runs on app shutdown
+    """
+    await broadcast.disconnect()
