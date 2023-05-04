@@ -22,6 +22,22 @@ class MessageEvent(BaseModel):
     message: str
 
 
+async def receive_message(websocket: WebSocket, username: str):
+    """The receive message function
+
+    Args:
+        websocket (WebSocket): The websocket object
+        username (str): The username
+    """
+    async with broadcast.subscribe(channel=CHANNEL) as subscriber:
+        async for event in subscriber:
+            message_event = MessageEvent.parse_raw(event.message)
+
+            # Discard the users own message
+            if message_event.username != username:
+                await websocket.send_json(message_event.dict())
+
+
 @app.get(
     "/",
     name="home",
