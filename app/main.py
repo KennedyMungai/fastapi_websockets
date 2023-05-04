@@ -32,3 +32,13 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
             await websocket.send_text(f"Message received: {data}")
     except WebSocketDisconnect:
         await websocket.close()
+
+
+async def echo_message(websocket: WebSocket):
+    """This os a function that shows the message
+
+    Args:
+        websocket (WebSocket): The websocket object
+    """
+    data = await websocket.receive_text()
+    await websocket.send_text(f"Message text was: {data}")
