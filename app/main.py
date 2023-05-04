@@ -25,7 +25,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
         websocket (WebSocket): The websocket object
     """
     await websocket.accept()
-    
+
     try:
         while True:
             data = await websocket.receive_text()
