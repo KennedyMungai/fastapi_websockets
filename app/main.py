@@ -5,6 +5,7 @@ from fastapi import FastAPI, WebSocket
 from starlette.websockets import WebSocketDisconnect
 from app.routers.dependencies import dependencies_router
 from broadcaster import Broadcast
+from pydantic import BaseModel
 
 
 app = FastAPI()
@@ -12,6 +13,12 @@ app = FastAPI()
 
 broadcast = Broadcast("redis://localhost:6379")
 CHANNEL = "CHAT"
+
+
+class MessageEvent(BaseModel):
+    """This is the message event class"""
+    username: str
+    message: str
 
 
 @app.get(
