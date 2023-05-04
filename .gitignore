@@ -1,0 +1,3 @@
+fastapi_websockets/
+__pycache__/
+.env
