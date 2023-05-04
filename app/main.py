@@ -84,7 +84,10 @@ async def send_time(websocket: WebSocket):
 
 
 @app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket) -> None:
+async def websocket_endpoint(
+    websocket: WebSocket,
+    username: str = "Anonymous"
+) -> None:
     """The websocket endpoint
 
     Args:
@@ -94,11 +97,14 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
 
     try:
         while True:
-            echo_message_task = asyncio.create_task(echo_message(websocket))
-            send_time_task = asyncio.create_task(send_time(websocket))
+            receive_message_task = asyncio.create_task(
+                receive_message(websocket, username))
+
+            send_message_task = asyncio.create_task(
+                send_message(websocket, username))
 
             done, pending = await asyncio.wait(
-                {echo_message_task, send_time_task},
+                {receive_message_task, send_message_task},
                 return_when=asyncio.FIRST_COMPLETED
             )
 
