@@ -4,9 +4,14 @@ from datetime import datetime
 from fastapi import FastAPI, WebSocket
 from starlette.websockets import WebSocketDisconnect
 from app.routers.dependencies import dependencies_router
+from broadcaster import Broadcast
 
 
 app = FastAPI()
+
+
+broadcast = Broadcast("redis://localhost:6379")
+CHANNEL = "CHAT"
 
 
 @app.get(
