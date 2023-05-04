@@ -97,7 +97,10 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
             echo_message_task = asyncio.create_task(echo_message(websocket))
             send_time_task = asyncio.create_task(send_time(websocket))
 
-            done, pending = await asyncio.wait({echo_message_task, send_time_task}, return_when=asyncio.FIRST_COMPLETED)
+            done, pending = await asyncio.wait(
+                {echo_message_task, send_time_task},
+                return_when=asyncio.FIRST_COMPLETED
+            )
 
             for task in pending:
                 task.cancel()
