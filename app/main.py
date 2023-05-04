@@ -1,12 +1,13 @@
 """This is the entrypoint to the project"""
 import asyncio
 from datetime import datetime
-from fastapi import FastAPI, WebSocket
-from starlette.websockets import WebSocketDisconnect
-from app.routers.dependencies import dependencies_router
-from broadcaster import Broadcast
-from pydantic import BaseModel
 
+from broadcaster import Broadcast
+from fastapi import FastAPI, WebSocket
+from pydantic import BaseModel
+from starlette.websockets import WebSocketDisconnect
+
+from app.routers.dependencies import dependencies_router
 
 app = FastAPI()
 
