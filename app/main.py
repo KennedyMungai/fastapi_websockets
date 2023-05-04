@@ -3,6 +3,7 @@ import asyncio
 from datetime import datetime
 from fastapi import FastAPI, WebSocket
 from starlette.websockets import WebSocketDisconnect
+from app.dependencies import dependencies
 
 
 app = FastAPI()
@@ -17,6 +18,8 @@ app = FastAPI()
 async def home() -> dict[str, str]:
     """This is the home endpoint"""
     return {"message": "Hello World"}
+
+app.include_router(dependencies)
 
 
 async def echo_message(websocket: WebSocket):
